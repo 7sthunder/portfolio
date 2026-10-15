@@ -5,7 +5,21 @@ import type { Project } from "./data";
 const rows = [["REQ-001", "Dubai → Abu Dhabi", "Pending"], ["REQ-002", "Sharjah → Jebel Ali", "Confirmed"], ["REQ-003", "Dubai → Al Ain", "In Transit"], ["REQ-004", "Abu Dhabi → Dubai", "Completed"], ["REQ-005", "Dubai → Fujairah", "Pending"]];
 const tone: Record<string, string> = { Pending: "bg-red-100 text-red-600", Confirmed: "bg-emerald-100 text-emerald-700", "In Transit": "bg-blue-100 text-blue-600", Completed: "bg-emerald-100 text-emerald-700" };
 
-/** Stylised UI window used in place of screenshots. Swap for <img> when you have real shots. */
+/**
+ * Real screenshot in the same browser-chrome frame the mock windows use, so
+ * captured shots sit consistently next to the stylised ones.
+ * `src` is a path relative to /public; BASE_URL keeps it correct under Pages.
+ */
+export function Shot({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
+  return (
+    <div className={`overflow-hidden rounded-xl border border-black/10 bg-white shadow-2xl shadow-black/20 ${className}`}>
+      <div className="flex gap-1.5 bg-night px-3 py-2">{["#ff5f57", "#febc2e", "#28c840"].map((c) => <i key={c} className="size-2 rounded-full" style={{ background: c }} />)}</div>
+      <img src={`${import.meta.env.BASE_URL}${src}`} alt={alt} loading="lazy" decoding="async" className="block w-full" />
+    </div>
+  );
+}
+
+/** Stylised UI window, used where no real screenshot exists yet. */
 export function Window({ kind = "dash", className = "" }: { kind?: Project["kind"]; className?: string }) {
   const dark = kind === "gym" || kind === "print";
   return (

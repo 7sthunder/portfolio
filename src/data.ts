@@ -1,9 +1,11 @@
-export type Project = { title: string; blurb: string; tags: string[]; kind: "dash" | "table" | "gym" | "people" | "print" };
+export type Project = { title: string; blurb: string; tags: string[]; kind: "dash" | "table" | "gym" | "people" | "print"; shot?: string; shotAlt?: string };
 export const featured: Project = {
   title: "Transport Management System",
   blurb: "A full-stack platform for UAE logistics operations. Manage transport requests, trips, vehicles, expenses, invoicing, driver assignments and more.",
   tags: ["React 19", "TypeScript", "tRPC", "Drizzle", "PostgreSQL", "Cloudflare Workers", "Tailwind CSS", "Leaflet"],
   kind: "table",
+  shot: "tms-dashboard.png",
+  shotAlt: "Transport Management System dashboard showing revenue against expenses, active drivers and available vehicles",
 };
 export const more: Project[] = [
   { title: "CrossFit OS", blurb: "Multi-tenant SaaS for gyms with member management, billing, attendance, AI trainer and community features.", tags: ["Astro", "React", "tRPC", "PostgreSQL"], kind: "gym" },

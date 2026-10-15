@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useMotionValue } from "motion/react";
 import { ArrowRight, ArrowUpRight, Github, Instagram, Linkedin, Mail, Phone as PhoneIcon } from "lucide-react";
 import { featured, independent, more, stack, stats } from "./data";
-import { Phone, Tilt, Window } from "./Mock";
+import { Phone, Shot, Tilt, Window } from "./Mock";
 
 const nav = ["About", "Projects", "Experience", "Skills", "Contact"];
 const wrap = "mx-auto w-full max-w-6xl px-6";
@@ -87,7 +87,7 @@ export default function App() {
               <div className="mt-5 flex flex-wrap gap-2">{featured.tags.map((t) => <Tag key={t} t={t} />)}</div>
               <div className="mt-6"><Button solid href="#">View Case Study</Button></div>
             </div>
-            <Tilt><Window kind="table" className="aspect-[16/10]" /></Tilt>
+            <Tilt>{featured.shot ? <Shot src={featured.shot} alt={featured.shotAlt ?? featured.title} /> : <Window kind={featured.kind} className="aspect-[16/10]" />}</Tilt>
           </div>
 
           <div className="mt-20">
