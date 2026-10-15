@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useMotionValue } from "motion/react";
 import { ArrowRight, ArrowUpRight, Github, Instagram, Linkedin, Mail, Phone as PhoneIcon } from "lucide-react";
 import { featured, independent, more, stack, stats } from "./data";
-import { Phone, Shot, Tilt, Window } from "./Mock";
+import { Phone, Shot, ShotThumb, Tilt, Window } from "./Mock";
 
 const nav = ["About", "Projects", "Experience", "Skills", "Contact"];
 const wrap = "mx-auto w-full max-w-6xl px-6";
@@ -97,7 +97,7 @@ export default function App() {
                 <span className="text-sm text-wine">0{i + 2}</span>
                 <div><h3 className="font-serif text-2xl">{p.title}</h3><p className="mt-1 text-[11px] tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p></div>
                 <div><p className="max-w-sm text-sm text-muted">{p.blurb}</p><div className="mt-3 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div></div>
-                <div className="overflow-hidden rounded-lg transition duration-500 group-hover:scale-[1.04] group-hover:-rotate-1"><Window kind={p.kind} className="h-24 !rounded-lg" /></div>
+                <div className="overflow-hidden rounded-lg transition duration-500 group-hover:scale-[1.04] group-hover:-rotate-1">{p.shot ? <ShotThumb src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind={p.kind} className="h-24 !rounded-lg" />}</div>
                 <ArrowRight className="text-muted transition group-hover:translate-x-1 group-hover:text-wine" />
               </a>
             ))}

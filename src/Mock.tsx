@@ -19,6 +19,19 @@ export function Shot({ src, alt, className = "" }: { src: string; alt: string; c
   );
 }
 
+/**
+ * Small (h-24) version of the same frame, for the project list. The image is
+ * cropped from the top with object-cover so the headline stays in view.
+ */
+export function ShotThumb({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div className="h-24 overflow-hidden rounded-lg border border-black/10 bg-white shadow-md">
+      <div className="flex gap-1.5 bg-night px-3 py-2">{["#ff5f57", "#febc2e", "#28c840"].map((c) => <i key={c} className="size-2 rounded-full" style={{ background: c }} />)}</div>
+      <img src={`${import.meta.env.BASE_URL}${src}`} alt={alt} loading="lazy" decoding="async" className="h-[72px] w-full object-cover object-top" />
+    </div>
+  );
+}
+
 /** Stylised UI window, used where no real screenshot exists yet. */
 export function Window({ kind = "dash", className = "" }: { kind?: Project["kind"]; className?: string }) {
   const dark = kind === "gym" || kind === "print";

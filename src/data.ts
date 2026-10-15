@@ -8,7 +8,7 @@ export const featured: Project = {
   shotAlt: "Transport Management System dashboard showing revenue against expenses, active drivers and available vehicles",
 };
 export const more: Project[] = [
-  { title: "CrossFit OS", blurb: "Multi-tenant SaaS for gyms with member management, billing, attendance, AI trainer and community features.", tags: ["Astro", "React", "tRPC", "PostgreSQL"], kind: "gym" },
+  { title: "CrossFit OS", blurb: "Multi-tenant SaaS for gyms with member management, billing, attendance, AI trainer and community features.", tags: ["Astro", "React", "tRPC", "PostgreSQL"], kind: "gym", shot: "crossfitos-landing.png", shotAlt: "CrossFitOS landing page with the Website, Store and Community hero headline" },
   { title: "A S Unique Group", blurb: "Recruitment operations platform for overseas hiring with candidate management, document workflows and team communication.", tags: ["React 19", "tRPC", "Cloudflare R2", "PostgreSQL"], kind: "people" },
   { title: "STAMP", blurb: "Production management system for a print shop covering orders, quotations, production, packing, delivery and payments.", tags: ["React", "tRPC", "Cloudflare D1", "Drizzle"], kind: "print" },
 ];
