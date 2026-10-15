@@ -1,16 +1,18 @@
 export type Project = { title: string; blurb: string; tags: string[]; kind: "dash" | "table" | "gym" | "people" | "print"; shot?: string; shotAlt?: string };
+
+/** Order across the section: featured first, then the list below it. */
 export const featured: Project = {
-  title: "Transport Management System",
-  blurb: "A full-stack platform for UAE logistics operations. Manage transport requests, trips, vehicles, expenses, invoicing, driver assignments and more.",
-  tags: ["React 19", "TypeScript", "tRPC", "Drizzle", "PostgreSQL", "Cloudflare Workers", "Tailwind CSS", "Leaflet"],
-  kind: "table",
-  shot: "tms-dashboard.png",
-  shotAlt: "Transport Management System dashboard showing revenue against expenses, active drivers and available vehicles",
+  title: "CrossFit OS",
+  blurb: "Multi-tenant SaaS for gyms with member management, billing, attendance, AI trainer and community features.",
+  tags: ["Astro", "React", "tRPC", "PostgreSQL"],
+  kind: "gym",
+  shot: "crossfitos-landing.png",
+  shotAlt: "CrossFitOS landing page with the Website, Store and Community hero headline",
 };
 export const more: Project[] = [
-  { title: "CrossFit OS", blurb: "Multi-tenant SaaS for gyms with member management, billing, attendance, AI trainer and community features.", tags: ["Astro", "React", "tRPC", "PostgreSQL"], kind: "gym", shot: "crossfitos-landing.png", shotAlt: "CrossFitOS landing page with the Website, Store and Community hero headline" },
-  { title: "A S Unique Group", blurb: "Recruitment operations platform for overseas hiring with candidate management, document workflows and team communication.", tags: ["React 19", "tRPC", "Cloudflare R2", "PostgreSQL"], kind: "people" },
-  { title: "STAMP", blurb: "Production management system for a print shop covering orders, quotations, production, packing, delivery and payments.", tags: ["React", "tRPC", "Cloudflare D1", "Drizzle"], kind: "print" },
+  { title: "Transport Management System", blurb: "A full-stack platform for UAE logistics operations. Manage transport requests, trips, vehicles, expenses, invoicing, driver assignments and more.", tags: ["React 19", "TypeScript", "tRPC", "Drizzle", "PostgreSQL", "Cloudflare Workers", "Tailwind CSS", "Leaflet"], kind: "table", shot: "tms-dashboard.png", shotAlt: "Transport Management System dashboard showing revenue against expenses, active drivers and available vehicles" },
+  { title: "A S Unique Group", blurb: "Recruitment operations platform for overseas hiring with candidate management, document workflows and team communication.", tags: ["React 19", "tRPC", "Cloudflare R2", "PostgreSQL"], kind: "people", shot: "asunique-dashboard.png", shotAlt: "A S Unique Group recruitment dashboard showing deployed candidates, total candidates and on-going requirements" },
+  { title: "STAMP", blurb: "Production management system for a print shop covering orders, quotations, production, packing, delivery and payments.", tags: ["React", "tRPC", "Cloudflare D1", "Drizzle"], kind: "print", shot: "stamp-dashboard.png", shotAlt: "STAMP production dashboard showing job orders by status and orders over time" },
 ];
 export const independent = [
   { title: "DocuVerify", sub: "Explainable Document Tamper Detection", blurb: "Analyses PDFs and images for potential tampering, produces a suspicion score, and highlights suspicious regions with evidence-backed explanations.", tags: ["Python", "OpenCV", "FastAPI", "React"], cta: "View Case Study", status: "" },
