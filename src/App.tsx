@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useMotionValue } from "motion/react";
 import { ArrowRight, ArrowUpRight, Github, Instagram, Linkedin, Mail, Phone as PhoneIcon } from "lucide-react";
-import { featured, independent, more, stack, stats } from "./data";
+import { featured, independent, more, stack, stats, type Project } from "./data";
 import { Phone, Shot, ShotThumb, Tilt, Window } from "./Mock";
 
 const nav = ["About", "Projects", "Experience", "Skills", "Contact"];
@@ -23,6 +23,38 @@ const Button = ({ children, href, solid }: { children: React.ReactNode; href: st
     {children}<ArrowRight size={15} className="transition group-hover:translate-x-1" />
   </a>
 );
+
+/**
+ * A row in the "more projects" list. Collapsed it shows just the number, the
+ * title and the arrow; hovering (or keyboard-focusing) it grows the row to
+ * reveal the blurb, tags and screenshot. Touch devices have no hover, so they
+ * get the expanded layout by default instead of a permanently closed row.
+ */
+function ProjectRow({ p, index }: { p: Project; index: number }) {
+  return (
+    <a href="#" className="group block border-b border-line transition-colors duration-300 hover:bg-white/60 focus-visible:bg-white/60">
+      <div className="grid grid-cols-[1.5rem_minmax(0,1fr)_1.5rem] items-start gap-x-4 py-5 md:grid-cols-[2.5rem_minmax(0,1fr)_2rem] md:gap-x-6 md:py-6">
+        <span className="pt-1 text-sm text-wine">{`0${index + 2}`}</span>
+        <div className="min-w-0">
+          <h3 className="font-serif text-2xl transition-colors duration-300 group-hover:text-wine">{p.title}</h3>
+          <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-out max-md:grid-rows-[1fr] group-hover:grid-rows-[1fr] group-focus-visible:grid-rows-[1fr]">
+            <div className="overflow-hidden">
+              <div className="grid gap-6 pb-5 md:grid-cols-[minmax(0,1fr)_13rem] md:gap-x-10 md:pb-6 md:pt-4">
+                <div>
+                  <p className="text-[11px] tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p>
+                  <p className="mt-2 max-w-sm text-sm text-muted">{p.blurb}</p>
+                  <div className="mt-3 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
+                </div>
+                <div className="overflow-hidden rounded-lg transition duration-500 group-hover:scale-[1.04] group-hover:-rotate-1">{p.shot ? <ShotThumb src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind={p.kind} className="h-24 !rounded-lg" />}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ArrowRight className="mt-1 justify-self-end text-muted transition group-hover:translate-x-1 group-hover:text-wine" />
+      </div>
+    </a>
+  );
+}
 
 export default function App() {
   const headline = ["Building", "useful software", "for real people."];
@@ -92,15 +124,7 @@ export default function App() {
 
           <div className="mt-20">
             <p className={`${label} mb-2 flex items-center gap-4`}>MORE PROJECTS AT A S CODELABS<span className="h-px flex-1 bg-line" /></p>
-            {more.map((p, i) => (
-              <a key={p.title} href="#" className="group grid items-center gap-6 border-b border-line py-6 md:grid-cols-[2.5rem_14rem_1fr_13rem_2rem]">
-                <span className="text-sm text-wine">0{i + 2}</span>
-                <div><h3 className="font-serif text-2xl">{p.title}</h3><p className="mt-1 text-[11px] tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p></div>
-                <div><p className="max-w-sm text-sm text-muted">{p.blurb}</p><div className="mt-3 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div></div>
-                <div className="overflow-hidden rounded-lg transition duration-500 group-hover:scale-[1.04] group-hover:-rotate-1">{p.shot ? <ShotThumb src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind={p.kind} className="h-24 !rounded-lg" />}</div>
-                <ArrowRight className="text-muted transition group-hover:translate-x-1 group-hover:text-wine" />
-              </a>
-            ))}
+            {more.map((p, i) => <ProjectRow key={p.title} p={p} index={i} />)}
           </div>
         </section>
 
