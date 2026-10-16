@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useMotionValue } from "motion/react";
 import { ArrowRight, ArrowUpRight, Github, Instagram, Linkedin, Mail, Phone as PhoneIcon } from "lucide-react";
 import { featured, independent, more, stack, stats, type Project } from "./data";
@@ -42,53 +42,139 @@ function CaseStudy({ p, n, lead }: { p: Project; n: string; lead?: boolean }) {
   );
 }
 
+/** One clock and easing for both directions, so a hand-off is a single motion. */
+const GROW_MS = 400;
+const GROW_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+
 /**
  * A project row. Collapsed it is the compact summary line; hovering — or
  * focusing — it grows into the full featured-project layout below.
  *
- * Both layers stay mounted and only their grid track heights swap, so the
- * section reflows smoothly and the screenshot is already cached. Opacity is
- * crossfaded on a shorter clock than the height so the outgoing copy is gone
- * before the incoming one is uncovered, which is what stops both versions of a
- * project from being visible at once while collapsing. Touch devices have no
- * hover, so there the row is a tap toggle instead.
+ * Only one layer is in flow at a time; the other is pulled out of it, so the
+ * row box's natural height is always the height of the layer on show. That box
+ * is animated in explicit pixels, measured from the layer being shown, because
+ * it is the row's height that the whole page above and below slides by.
+ * Animating a grid track instead looks equivalent but does not interpolate
+ * reliably: the incoming layer snaps to full height while the outgoing one
+ * still holds its old height for the full duration, so the page visibly
+ * overshoots and then settles.
+ *
+ * Opacity crossfades on a shorter clock than the height, so the outgoing copy
+ * is gone before the incoming one is uncovered — that is what stops both
+ * versions of a project being visible at once. Touch devices have no hover, so
+ * there the row is a tap toggle instead.
  */
-function ProjectRow({ p, i }: { p: Project; i: number }) {
-  const [open, setOpen] = useState(false);
-  const close = useRef<number | undefined>(undefined);
+function ProjectRow({ p, i, open, onEnter, onLeave, onToggle }: {
+  p: Project; i: number; open: boolean;
+  onEnter: () => void; onLeave: () => void; onToggle: () => void;
+}) {
+  const box = useRef<HTMLDivElement>(null);
+  const row = useRef<HTMLDivElement>(null);
+  const wide = useRef<HTMLDivElement>(null);
+  const sized = useRef(false);
+  const held = useRef(0);
+  const running = useRef(false);
   const n = `0${i + 1}`;
   const canHover = () => window.matchMedia("(hover: hover)").matches;
-  const show = () => { clearTimeout(close.current); setOpen(true); };
-  const hide = () => { clearTimeout(close.current); close.current = window.setTimeout(() => setOpen(false), 100); };
-  useEffect(() => () => clearTimeout(close.current), []);
+
+  useLayoutEffect(() => {
+    const el = box.current!, to = (open ? wide.current! : row.current!).offsetHeight;
+    // While a transition is in flight the box is still pinned to pixels, so its
+    // measured height is the live one. Once it has settled the height goes back
+    // to `auto`, and measuring then would read the *new* layout — so rest on the
+    // height we last drove it to.
+    const from = running.current ? el.offsetHeight : held.current;
+    if (!sized.current) { sized.current = true; held.current = to; el.style.height = to + "px"; return; }
+    running.current = true;
+    el.style.transition = "none";
+    el.style.height = from + "px";
+    void el.offsetHeight; // commit the start value so the next one animates
+    el.style.transition = `height ${GROW_MS}ms ${GROW_EASE}`;
+    el.style.height = to + "px";
+    held.current = to;
+    // Hand the height back to the content once it has settled, so late web
+    // fonts, a resized viewport or an image finishing can reflow the row
+    // itself instead of being pinned to stale pixels.
+    const done = window.setTimeout(() => { running.current = false; el.style.transition = ""; el.style.height = ""; }, GROW_MS);
+    return () => clearTimeout(done);
+  }, [open]);
+
+  useEffect(() => {
+    const sync = () => { if (!running.current) held.current = box.current!.offsetHeight; };
+    window.addEventListener("resize", sync);
+    document.fonts?.ready.then(sync);
+    return () => window.removeEventListener("resize", sync);
+  }, []);
+
   return (
     <div
       role="button"
       tabIndex={0}
       aria-expanded={open}
       className="border-b border-line"
-      onPointerEnter={() => { if (canHover()) show(); }}
-      onPointerLeave={() => { if (canHover()) hide(); }}
-      onFocus={show}
-      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen(false); }}
-      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen((o) => !o); } }}
-      onClick={() => { if (!canHover()) setOpen((o) => !o); }}
+      onPointerEnter={() => { if (canHover()) onEnter(); }}
+      onPointerLeave={() => { if (canHover()) onLeave(); }}
+      onFocus={onEnter}
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onLeave(); }}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onToggle(); } }}
+      onClick={() => { if (!canHover()) onToggle(); }}
     >
-      <div className={`grid transition-[grid-template-rows] ${open ? "grid-rows-[0fr_1fr] duration-500 ease-[cubic-bezier(0.22_1_0.36_1)]" : "grid-rows-[1fr_0fr] duration-300 ease-[cubic-bezier(0.4_0_0.2_1)]"}`}>
-        <div inert={open} className={`grid items-center overflow-hidden transition-opacity ${open ? "pointer-events-none opacity-0 duration-150" : "opacity-100 duration-200"}`}>
-          <a href="#" className="group grid items-center gap-6 py-6 md:grid-cols-[2.5rem_14rem_1fr_13rem_2rem]">
-            <span className="text-sm text-wine">{n}</span>
-            <div><h3 className="font-serif text-2xl">{p.title}</h3><p className="mt-1 text-[11px] tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p></div>
-            <div><p className="max-w-sm text-sm text-muted">{p.blurb}</p><div className="mt-3 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div></div>
-            <div className="overflow-hidden rounded-lg transition duration-500 group-hover:scale-[1.04] group-hover:-rotate-1">{p.shot ? <ShotThumb src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind={p.kind} className="h-24 !rounded-lg" />}</div>
-            <ArrowRight className="text-muted transition group-hover:translate-x-1 group-hover:text-wine" />
-          </a>
+      {/* Centred while closing so the box closes around the row rather than
+          leaving a gap under it; top-anchored while opening so the case study
+          is uncovered from the top. */}
+      <div ref={box} className={`relative flex overflow-hidden ${open ? "items-start" : "items-center"}`}>
+        <div inert={open} className={`w-full transition-opacity ${open ? "pointer-events-none absolute inset-x-0 top-0 opacity-0 duration-100" : "opacity-100 duration-200"}`}>
+          <div ref={row}>
+            <a href="#" className="group grid items-center gap-6 py-6 md:grid-cols-[2.5rem_14rem_1fr_13rem_2rem]">
+              <span className="text-sm text-wine">{n}</span>
+              <div><h3 className="font-serif text-2xl">{p.title}</h3><p className="mt-1 text-[11px] tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p></div>
+              <div><p className="max-w-sm text-sm text-muted">{p.blurb}</p><div className="mt-3 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div></div>
+              <div className="overflow-hidden rounded-lg transition duration-500 group-hover:scale-[1.04] group-hover:-rotate-1">{p.shot ? <ShotThumb src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind={p.kind} className="h-24 !rounded-lg" />}</div>
+              <ArrowRight className="text-muted transition group-hover:translate-x-1 group-hover:text-wine" />
+            </a>
+          </div>
         </div>
-        <div inert={!open} className={`overflow-hidden transition-opacity ${open ? "opacity-100 duration-300 delay-150" : "pointer-events-none opacity-0 duration-150"}`}>
-          <div className="pb-10 pt-2"><CaseStudy p={p} n={n} lead={!i} /></div>
+        <div inert={!open} className={`w-full transition-opacity ${open ? "opacity-100 duration-250 delay-100" : "pointer-events-none absolute inset-x-0 top-0 opacity-0 duration-100"}`}>
+          <div ref={wide} className="pb-10 pt-2"><CaseStudy p={p} n={n} lead={!i} /></div>
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * The project list, and the single owner of which row is open. Keeping the
+ * index up here means only one row is ever open: running the pointer down the
+ * list hands off from one row to the next rather than letting both grow at
+ * once, so the page above and below slides once, in one direction, instead of
+ * swelling and settling back. Open and close also share one clock and easing —
+ * a row closing as another opens then sums to a single smooth height change
+ * rather than a dip.
+ */
+function ProjectList({ items }: { items: Project[] }) {
+  const [open, setOpen] = useState<number | null>(null);
+  const last = useRef<number | null>(null);
+  const closing = useRef<number | undefined>(undefined);
+  useEffect(() => () => clearTimeout(closing.current), []);
+  // Entering always wins: it clears any pending close, so a handoff collapses
+  // the row being left right away instead of leaving both open for a beat.
+  const enter = (i: number) => { last.current = i; clearTimeout(closing.current); setOpen(i); };
+  // Leaving is only debounced when nothing took over, which is the case that
+  // needs it: the pointer skimming the bottom edge of a tall expanded panel.
+  const leave = (i: number) => {
+    if (last.current !== i) return;
+    closing.current = window.setTimeout(() => setOpen((cur) => (cur === i ? null : cur)), 100);
+  };
+  return (
+    <>
+      {items.map((p, i) => (
+        <ProjectRow
+          key={p.title} p={p} i={i} open={open === i}
+          onEnter={() => enter(i)} onLeave={() => leave(i)}
+          onToggle={() => setOpen((cur) => (cur === i ? null : i))}
+        />
+      ))}
+    </>
   );
 }
 
@@ -146,7 +232,7 @@ export default function App() {
         {/* Projects */}
         <section id="projects" className={`${wrap} py-20`}>
           <p className={`${label} mb-2 flex items-center gap-4`}>PROJECTS AT A S CODELABS<span className="h-px flex-1 bg-line" /></p>
-          {[featured, ...more].map((p, i) => <ProjectRow key={p.title} p={p} i={i} />)}
+          <ProjectList items={[featured, ...more]} />
         </section>
 
         {/* Independent */}
