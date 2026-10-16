@@ -25,11 +25,11 @@ const Button = ({ children, href, solid }: { children: React.ReactNode; href: st
 );
 
 /** The full-width, featured-style layout a list row grows into. */
-function CaseStudy({ p, n }: { p: Project; n: string }) {
+function CaseStudy({ p, n, lead }: { p: Project; n: string; lead?: boolean }) {
   return (
     <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.4fr]">
       <div>
-        <span className="rounded bg-wine/10 px-2 py-1 text-xs text-wine">Case study</span>
+        <span className="rounded bg-wine/10 px-2 py-1 text-xs text-wine">{lead ? "Featured project" : "Case study"}</span>
         <div className="mt-4 text-sm text-wine">{n}</div>
         <h3 className="font-serif text-4xl leading-tight">{p.title}</h3>
         <p className="mt-3 text-xs tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p>
@@ -43,31 +43,39 @@ function CaseStudy({ p, n }: { p: Project; n: string }) {
 }
 
 /**
- * A row in the "more projects" list. Collapsed it is the compact summary row;
- * hovering — or focusing — it grows into the full featured-project layout
- * below. Both layers stay mounted and only their grid track heights swap, so
- * the section reflows smoothly and the screenshot is already cached. Touch
- * devices have no hover, so there the row is a tap toggle instead.
+ * A project row. Collapsed it is the compact summary line; hovering — or
+ * focusing — it grows into the full featured-project layout below.
+ *
+ * Both layers stay mounted and only their grid track heights swap, so the
+ * section reflows smoothly and the screenshot is already cached. Opacity is
+ * crossfaded on a shorter clock than the height so the outgoing copy is gone
+ * before the incoming one is uncovered, which is what stops both versions of a
+ * project from being visible at once while collapsing. Touch devices have no
+ * hover, so there the row is a tap toggle instead.
  */
 function ProjectRow({ p, i }: { p: Project; i: number }) {
   const [open, setOpen] = useState(false);
-  const n = `0${i + 2}`;
+  const close = useRef<number | undefined>(undefined);
+  const n = `0${i + 1}`;
   const canHover = () => window.matchMedia("(hover: hover)").matches;
+  const show = () => { clearTimeout(close.current); setOpen(true); };
+  const hide = () => { clearTimeout(close.current); close.current = window.setTimeout(() => setOpen(false), 100); };
+  useEffect(() => () => clearTimeout(close.current), []);
   return (
     <div
       role="button"
       tabIndex={0}
       aria-expanded={open}
       className="border-b border-line"
-      onPointerEnter={() => { if (canHover()) setOpen(true); }}
-      onPointerLeave={() => { if (canHover()) setOpen(false); }}
-      onFocus={() => setOpen(true)}
+      onPointerEnter={() => { if (canHover()) show(); }}
+      onPointerLeave={() => { if (canHover()) hide(); }}
+      onFocus={show}
       onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen(false); }}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen((o) => !o); } }}
       onClick={() => { if (!canHover()) setOpen((o) => !o); }}
     >
-      <div className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22_1_0.36_1)] ${open ? "grid-rows-[0fr_1fr]" : "grid-rows-[1fr_0fr]"}`}>
-        <div inert={open} className={`overflow-hidden transition-opacity duration-300 ${open ? "pointer-events-none opacity-0" : "opacity-100"}`}>
+      <div className={`grid transition-[grid-template-rows] ${open ? "grid-rows-[0fr_1fr] duration-500 ease-[cubic-bezier(0.22_1_0.36_1)]" : "grid-rows-[1fr_0fr] duration-300 ease-[cubic-bezier(0.4_0_0.2_1)]"}`}>
+        <div inert={open} className={`grid items-center overflow-hidden transition-opacity ${open ? "pointer-events-none opacity-0 duration-150" : "opacity-100 duration-200"}`}>
           <a href="#" className="group grid items-center gap-6 py-6 md:grid-cols-[2.5rem_14rem_1fr_13rem_2rem]">
             <span className="text-sm text-wine">{n}</span>
             <div><h3 className="font-serif text-2xl">{p.title}</h3><p className="mt-1 text-[11px] tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p></div>
@@ -76,8 +84,8 @@ function ProjectRow({ p, i }: { p: Project; i: number }) {
             <ArrowRight className="text-muted transition group-hover:translate-x-1 group-hover:text-wine" />
           </a>
         </div>
-        <div inert={!open} className={`overflow-hidden transition-opacity duration-500 ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}>
-          <div className="pb-10 pt-2"><CaseStudy p={p} n={n} /></div>
+        <div inert={!open} className={`overflow-hidden transition-opacity ${open ? "opacity-100 duration-300 delay-150" : "pointer-events-none opacity-0 duration-150"}`}>
+          <div className="pb-10 pt-2"><CaseStudy p={p} n={n} lead={!i} /></div>
         </div>
       </div>
     </div>
@@ -135,25 +143,10 @@ export default function App() {
           </div>
         </section>
 
-        {/* Featured */}
+        {/* Projects */}
         <section id="projects" className={`${wrap} py-20`}>
-          <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.4fr]">
-            <div>
-              <span className="rounded bg-wine/10 px-2 py-1 text-xs text-wine">Featured project</span>
-              <div className="mt-4 text-sm text-wine">01</div>
-              <h2 className="font-serif text-4xl leading-tight">{featured.title}</h2>
-              <p className="mt-3 text-xs tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p>
-              <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-muted">{featured.blurb}</p>
-              <div className="mt-5 flex flex-wrap gap-2">{featured.tags.map((t) => <Tag key={t} t={t} />)}</div>
-              <div className="mt-6"><Button solid href="#">View Case Study</Button></div>
-            </div>
-            <Tilt>{featured.shot ? <Shot src={featured.shot} alt={featured.shotAlt ?? featured.title} /> : <Window kind={featured.kind} className="aspect-[16/10]" />}</Tilt>
-          </div>
-
-          <div className="mt-20">
-            <p className={`${label} mb-2 flex items-center gap-4`}>MORE PROJECTS AT A S CODELABS<span className="h-px flex-1 bg-line" /></p>
-            {more.map((p, i) => <ProjectRow key={p.title} p={p} i={i} />)}
-          </div>
+          <p className={`${label} mb-2 flex items-center gap-4`}>PROJECTS AT A S CODELABS<span className="h-px flex-1 bg-line" /></p>
+          {[featured, ...more].map((p, i) => <ProjectRow key={p.title} p={p} i={i} />)}
         </section>
 
         {/* Independent */}
