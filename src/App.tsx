@@ -42,9 +42,17 @@ function CaseStudy({ p, n, lead }: { p: Project; n: string; lead?: boolean }) {
   );
 }
 
-/** One clock and easing for both directions, so a hand-off is a single motion. */
-const GROW_MS = 400;
-const GROW_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+/**
+ * One clock and easing for both directions, so a hand-off is a single motion.
+ * 600ms on the standard ease-in-out rather than a decelerate curve: a
+ * decelerate covers most of the distance in the first fifth of the time and
+ * reads as fast no matter how long it runs, whereas easing in and out spends
+ * the duration evenly and settles as deliberately as it started. Because both
+ * directions share it, the closing and opening rows always sum to one
+ * monotonic height change.
+ */
+const GROW_MS = 600;
+const GROW_EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
 
 /**
  * A project row. Collapsed it is the compact summary line; hovering — or
@@ -123,7 +131,7 @@ function ProjectRow({ p, i, open, onEnter, onLeave, onToggle }: {
           leaving a gap under it; top-anchored while opening so the case study
           is uncovered from the top. */}
       <div ref={box} className={`relative flex overflow-hidden ${open ? "items-start" : "items-center"}`}>
-        <div inert={open} className={`w-full transition-opacity ${open ? "pointer-events-none absolute inset-x-0 top-0 opacity-0 duration-100" : "opacity-100 duration-200"}`}>
+        <div inert={open} className={`w-full transition-opacity ${open ? "pointer-events-none absolute inset-x-0 top-0 opacity-0 duration-150" : "opacity-100 duration-300"}`}>
           <div ref={row}>
             <a href="#" className="group grid items-center gap-6 py-6 md:grid-cols-[2.5rem_14rem_1fr_13rem_2rem]">
               <span className="text-sm text-wine">{n}</span>
@@ -134,7 +142,7 @@ function ProjectRow({ p, i, open, onEnter, onLeave, onToggle }: {
             </a>
           </div>
         </div>
-        <div inert={!open} className={`w-full transition-opacity ${open ? "opacity-100 duration-250 delay-100" : "pointer-events-none absolute inset-x-0 top-0 opacity-0 duration-100"}`}>
+        <div inert={!open} className={`w-full transition-opacity ${open ? "opacity-100 duration-400 delay-150" : "pointer-events-none absolute inset-x-0 top-0 opacity-0 duration-150"}`}>
           <div ref={wide} className="pb-10 pt-2"><CaseStudy p={p} n={n} lead={!i} /></div>
         </div>
       </div>
