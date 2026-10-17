@@ -18,8 +18,8 @@ function Count({ to, suffix = "" }: { to: number; suffix?: string }) {
   return <span ref={ref}>{out}{suffix}</span>;
 }
 
-const Button = ({ children, href, solid }: { children: React.ReactNode; href: string; solid?: boolean }) => (
-  <a href={href} className={`group inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-medium transition ${solid ? "bg-wine text-white shadow-lg shadow-wine/25 hover:bg-wine-dark" : "text-ink hover:text-wine"}`}>
+const Button = ({ children, href, solid, className = "" }: { children: React.ReactNode; href: string; solid?: boolean; className?: string }) => (
+  <a href={href} className={`group inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-medium transition ${solid ? "bg-wine text-white shadow-lg shadow-wine/25 hover:bg-wine-dark" : "text-ink hover:text-wine"} ${className}`}>
     {children}<ArrowRight size={15} className="transition group-hover:translate-x-1" />
   </a>
 );
@@ -219,16 +219,18 @@ export default function App() {
         {/* Hero */}
         <section id="about" className={`${wrap} grid items-center gap-12 py-16 lg:grid-cols-[1fr_1.2fr] lg:py-24`}>
           <div>
-            <p className="mb-6 text-xs tracking-widest text-muted">SOFTWARE ENGINEER · FULL-STACK · APPLIED AI</p>
-            <h1 className="font-serif text-6xl leading-[1.02] tracking-tight sm:text-7xl">
+            <p className="mb-6 font-display text-xs font-semibold tracking-widest text-muted">SOFTWARE ENGINEER · FULL-STACK · APPLIED AI</p>
+            <h1 className="font-display text-6xl font-bold leading-[1.05] tracking-tight sm:text-7xl">
               {headline.map((l, i) => (
-                <span key={l} className="block overflow-hidden pb-1">
-                  <motion.span className={`block ${i === 2 ? "text-wine" : ""}`} initial={{ y: "105%" }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.1 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}>{l}</motion.span>
+                <span key={l} className="block overflow-hidden pb-1.5">
+                  {/* The payload of the sentence takes the heaviest weight; the
+                      words framing it stay one step back so the eye lands on it. */}
+                  <motion.span className={`block ${i === 1 ? "font-extrabold" : i === 2 ? "text-wine" : ""}`} initial={{ y: "105%" }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.1 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}>{l}</motion.span>
                 </span>
               ))}
             </h1>
-            <p className="mt-6 max-w-md text-[15px] leading-relaxed text-muted">I'm Aadhi Narayanan R — a software developer with 6+ months of hands-on internship experience at A S CodeLabs, working on real-world business applications, alongside independent projects in AI, machine learning, and full-stack engineering.</p>
-            <div className="mt-8 flex items-center gap-4"><Button solid href="#projects">Explore my work</Button><Button href="#contact">Get in touch</Button></div>
+            <p className="mt-6 max-w-md text-[15px] leading-relaxed text-muted">I'm <b className="font-semibold text-ink">Aadhi Narayanan R</b> — a software developer with <b className="font-semibold text-ink">6+ months of hands-on internship experience at A S CodeLabs</b>, working on real-world business applications, alongside independent projects in AI, machine learning, and full-stack engineering.</p>
+            <div className="mt-8 flex items-center gap-4"><Button solid href="#projects" className="font-display font-semibold">Explore my work</Button><Button href="#contact" className="font-display font-semibold">Get in touch</Button></div>
             <div className="mt-8 flex gap-5">
               {[[Linkedin, "https://linkedin.com/in/aadhi-narayanan-80093332", "LinkedIn"], [Github, "https://github.com/", "GitHub"], [Instagram, "https://instagram.com/7s_thunder", "Instagram"], [Mail, "mailto:aadhinarayanan23@gmail.com", "Email"]].map(([Icon, href, name]) => {
                 const I = Icon as typeof Mail; return <a key={name as string} href={href as string} aria-label={name as string} className="transition hover:-translate-y-0.5 hover:text-wine"><I size={20} /></a>;

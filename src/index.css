@@ -2,6 +2,10 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Newsreader", Georgia, serif;
+  /* Hero display face. A grotesque holds its own at 72px, where the serif's
+     thin strokes start to wash out; Inter is kept as the fallback so a blocked
+     or slow webfont still lands on the site's own sans. */
+  --font-display: "Bricolage Grotesque", "Inter", ui-sans-serif, system-ui, sans-serif;
   --color-paper: #faf7f2;
   --color-ink: #17181c;
   --color-muted: #5f6066;
