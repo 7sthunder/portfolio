@@ -257,14 +257,16 @@ export default function App() {
               })}
             </div>
           </div>
-          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, delay: 0.3 }}>
-            {/* The photograph takes the frame the mockup card held, so the hero
-                keeps its height, balance and spacing. object-cover fills that
-                landscape box from a 708x893 portrait without stretching it; the
-                vertical anchor sits just off the top edge, which is where the
-                subject is, trimming the dead ceiling but keeping headroom above
-                the hair so the face, profile and upper body all stay in frame. */}
-            <img src={portHero} alt="Aadhi Narayanan R" className="block aspect-[16/10] w-full rounded-xl object-cover object-[center_15%]" />
+          {/* The photo bleeds instead of sitting in a card: the negative margin
+              cancels the wrap's right padding exactly (-5/-8/-12 match
+              px-5/sm:px-8/lg:px-12), so the image runs flush to the viewport
+              edge at every tier and only its top edge stays a hard line. The two
+              paper-coloured fades dissolve the left edge into the text side and
+              lift the bottom into the stats strip below, which is what removes
+              the boxed-in look; pointer-events-none keeps them purely visual. */}
+          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, delay: 0.3 }} className="relative -mr-5 sm:-mr-8 lg:-mr-12">
+            <img src={portHero} alt="Aadhi Narayanan R" className="block aspect-[3/4] w-full object-cover object-[center_15%] sm:aspect-[4/3]" />
+            <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-paper)_0%,transparent_24%),linear-gradient(to_top,var(--color-paper)_0%,transparent_30%)]" />
           </motion.div>
         </section>
 
