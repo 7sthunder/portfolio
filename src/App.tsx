@@ -34,8 +34,18 @@ function CaseStudy({ p, n, lead }: { p: Project; n: string; lead?: boolean }) {
         <h3 className="font-serif text-4xl leading-tight">{p.title}</h3>
         <p className="mt-3 text-xs tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p>
         <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-muted">{p.blurb}</p>
+        {p.highlights && (
+          <ul className="mt-5 max-w-sm space-y-2">
+            {p.highlights.map((h) => (
+              <li key={h} className="flex gap-2.5 text-sm leading-relaxed text-muted"><i className="mt-[9px] size-1 shrink-0 rounded-full bg-wine" />{h}</li>
+            ))}
+          </ul>
+        )}
         <div className="mt-5 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
-        <div className="mt-6"><Button solid href="#">View Case Study</Button></div>
+        <div className="mt-6 flex flex-wrap items-center gap-5">
+          <Button solid href="#">View Case Study</Button>
+          {p.live && <a href={p.live} target="_blank" rel="noreferrer" className="group inline-flex items-center gap-1.5 text-sm text-wine">Live site<ArrowUpRight size={15} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></a>}
+        </div>
       </div>
       <Tilt>{p.shot ? <Shot src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind={p.kind} className="aspect-[16/10]" />}</Tilt>
     </div>
