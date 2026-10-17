@@ -257,16 +257,22 @@ export default function App() {
               })}
             </div>
           </div>
-          {/* The photo bleeds instead of sitting in a card: the negative margin
-              cancels the wrap's right padding exactly (-5/-8/-12 match
-              px-5/sm:px-8/lg:px-12), so the image runs flush to the viewport
-              edge at every tier and only its top edge stays a hard line. The two
-              paper-coloured fades dissolve the left edge into the text side and
-              lift the bottom into the stats strip below, which is what removes
-              the boxed-in look; pointer-events-none keeps them purely visual. */}
-          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, delay: 0.3 }} className="relative -mr-5 sm:-mr-8 lg:-mr-12">
-            <img src={portHero} alt="Aadhi Narayanan R" className="block aspect-[3/4] w-full object-cover object-[center_15%] sm:aspect-[4/3]" />
-            <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-paper)_0%,transparent_24%),linear-gradient(to_top,var(--color-paper)_0%,transparent_30%)]" />
+          {/* The photograph is the hero's right half, not a panel inside it.
+              1.2fr already gives it ~55% of the row; the -ml pulls its left
+              edge into the grid gap so it tucks against the copy rather than
+              floating off it, and the -mr cancels the wrap's right padding so
+              it runs to the viewport edge. The 6/5 crop replaces 4/3, which is
+              what had the box reading as small: it is the only thing capping
+              the height, since nothing else limits it. Only the left edge
+              fades, via a mask rather than a painted overlay, so no colour is
+              laid over the photograph at all and the body, railing and mall
+              stay fully visible down to the bottom edge. */}
+          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, delay: 0.3 }} className="-mr-5 sm:-mr-8 lg:-ml-10 lg:-mr-12">
+            <img
+              src={portHero}
+              alt="Aadhi Narayanan R"
+              className="block aspect-[3/4] w-full object-cover object-[center_15%] [mask-image:linear-gradient(to_right,transparent_0%,black_16%)] sm:aspect-[4/3] lg:aspect-[6/5]"
+            />
           </motion.div>
         </section>
 
