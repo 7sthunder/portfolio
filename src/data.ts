@@ -18,6 +18,7 @@ export const featured: Project = {
 };
 export const more: Project[] = [
   { title: "Transport Management System", blurb: "A full-stack platform for UAE logistics operations. Manage transport requests, trips, vehicles, expenses, invoicing, driver assignments and more.", tags: ["React 19", "TypeScript", "tRPC", "Drizzle", "PostgreSQL", "Cloudflare Workers", "Tailwind CSS", "Leaflet"], kind: "table", shot: "tms-dashboard.png", shotAlt: "Transport Management System dashboard showing revenue against expenses, active drivers and available vehicles",
+    live: "https://tms.ascodelabs.com",
     highlights: [
       "Request intake through to trip completion, with live tracking",
       "Fleet view of available vehicles and driver assignments",
