@@ -258,14 +258,13 @@ export default function App() {
             </div>
           </div>
           <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, delay: 0.3 }}>
-            {/* Same 16/10 box the mockup card occupied. The photo is portrait
-                (708x893), so cover keeps a horizontal band of it; the face and
-                hair sit in the top third, hence object-top — centring would
-                crop the top of the head off. width/height reserve the box
-                before the bytes land. */}
-            <Tilt>
-              <img src={portHero} alt="Aadhi Narayanan R, photographed from the side" width={708} height={893} decoding="async" className="aspect-[16/10] w-full rounded-xl object-cover object-top" />
-            </Tilt>
+            {/* The photograph takes the frame the mockup card held, so the hero
+                keeps its height, balance and spacing. object-cover fills that
+                landscape box from a 708x893 portrait without stretching it; the
+                vertical anchor sits just off the top edge, which is where the
+                subject is, trimming the dead ceiling but keeping headroom above
+                the hair so the face, profile and upper body all stay in frame. */}
+            <img src={portHero} alt="Aadhi Narayanan R" className="block aspect-[16/10] w-full rounded-xl object-cover object-[center_15%]" />
           </motion.div>
         </section>
 
