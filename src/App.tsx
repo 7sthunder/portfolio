@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useMotionValue } from "motion/react";
-import { ArrowRight, ArrowUpRight, Github, Instagram, Linkedin, Mail, Phone as PhoneIcon } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Github, Instagram, Linkedin, Mail, MessageCircle } from "lucide-react";
 import { featured, independent, more, stack, stats, type Project } from "./data";
 import { Phone, Shot, ShotThumb, Tilt, Window } from "./Mock";
 
@@ -294,8 +294,10 @@ export default function App() {
           <div><p className="mb-3 text-xs tracking-widest text-white/60">● GET IN TOUCH</p><h2 className="font-serif text-4xl leading-tight">Have a useful problem<br />to solve? Let's talk.</h2></div>
           <p className="self-center text-sm leading-relaxed text-white/70">I'm always interested in discussing software engineering, practical AI applications, challenging technical problems, and opportunities to build useful products.</p>
           <ul className="space-y-4 text-sm lg:border-l lg:border-white/15 lg:pl-8">
-            {[[Mail, "aadhinarayanan23@gmail.com", "mailto:aadhinarayanan23@gmail.com"], [PhoneIcon, "+91 7200016636", "tel:+917200016636"], [Linkedin, "aadhi-narayanan-80093332", "https://linkedin.com/in/aadhi-narayanan-80093332"], [Instagram, "@7s_thunder", "https://instagram.com/7s_thunder"]].map(([Icon, text, href]) => {
-              const I = Icon as typeof Mail; return <li key={text as string}><a href={href as string} className="flex items-center gap-3 hover:text-white/70"><I size={16} />{text as string}</a></li>;
+            {[[Mail, "aadhinarayanan23r@gmail.com", "mailto:aadhinarayanan23r@gmail.com"], [MessageCircle, "+91 72000 16636", "https://wa.me/917200016636"], [Linkedin, "Aadhi Narayanan R", "https://www.linkedin.com/in/aadhi-narayanan-80093332a"], [Instagram, "@7s_thunder", "https://instagram.com/7s_thunder"]].map(([Icon, text, href]) => {
+              const I = Icon as typeof Mail;
+              const ext = !(href as string).startsWith("mailto:");
+              return <li key={text as string}><a href={href as string} target={ext ? "_blank" : undefined} rel={ext ? "noopener noreferrer" : undefined} className="flex items-center gap-3 hover:text-white/70"><I size={16} />{text as string}</a></li>;
             })}
           </ul>
         </div>
