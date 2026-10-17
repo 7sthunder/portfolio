@@ -3,6 +3,7 @@ import { animate, motion, useInView, useMotionValue } from "motion/react";
 import { ArrowRight, ArrowUpRight, Github, Instagram, Linkedin, Mail } from "lucide-react";
 import { featured, independent, more, stack, stats, type Project } from "./data";
 import { Phone, Shot, ShotThumb, Tilt, Window } from "./Mock";
+import portHero from "./assets/port_hero.png";
 
 const nav = ["About", "Projects", "Experience", "Skills", "Contact"];
 // 90rem, not the usual 72rem: the case-study screenshots are the widest thing
@@ -257,7 +258,14 @@ export default function App() {
             </div>
           </div>
           <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, delay: 0.3 }}>
-            <Tilt><Window kind="dash" className="aspect-[16/10]" /></Tilt>
+            {/* Same 16/10 box the mockup card occupied. The photo is portrait
+                (708x893), so cover keeps a horizontal band of it; the face and
+                hair sit in the top third, hence object-top — centring would
+                crop the top of the head off. width/height reserve the box
+                before the bytes land. */}
+            <Tilt>
+              <img src={portHero} alt="Aadhi Narayanan R, photographed from the side" width={708} height={893} decoding="async" className="aspect-[16/10] w-full rounded-xl object-cover object-top" />
+            </Tilt>
           </motion.div>
         </section>
 
