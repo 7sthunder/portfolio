@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useMotionValue } from "motion/react";
-import { ArrowRight, ArrowUpRight, Github, Instagram, Linkedin, Mail, MessageCircle } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Github, Instagram, Linkedin, Mail } from "lucide-react";
 import { featured, independent, more, stack, stats, type Project } from "./data";
 import { Phone, Shot, ShotThumb, Tilt, Window } from "./Mock";
 
@@ -22,6 +22,13 @@ const Button = ({ children, href, solid }: { children: React.ReactNode; href: st
   <a href={href} className={`group inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-medium transition ${solid ? "bg-wine text-white shadow-lg shadow-wine/25 hover:bg-wine-dark" : "text-ink hover:text-wine"}`}>
     {children}<ArrowRight size={15} className="transition group-hover:translate-x-1" />
   </a>
+);
+
+/** Official WhatsApp mark — lucide dropped its brand icons, so the glyph is inlined. */
+const WhatsApp = ({ size = 24, ...rest }: { size?: number } & React.SVGProps<SVGSVGElement>) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={size} height={size} fill="currentColor" {...rest}>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.987 2.896 9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.886-9.885 9.886M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.359.101 11.945c0 2.096.549 4.142 1.588 5.945L0 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.585 0 11.946-5.359 11.949-11.945a11.87 11.87 0 0 0-3.426-8.398" />
+  </svg>
 );
 
 /** The full-width, featured-style layout a list row grows into. */
@@ -294,7 +301,7 @@ export default function App() {
           <div><p className="mb-3 text-xs tracking-widest text-white/60">● GET IN TOUCH</p><h2 className="font-serif text-4xl leading-tight">Have a useful problem<br />to solve? Let's talk.</h2></div>
           <p className="self-center text-sm leading-relaxed text-white/70">I'm always interested in discussing software engineering, practical AI applications, challenging technical problems, and opportunities to build useful products.</p>
           <ul className="space-y-4 text-sm lg:border-l lg:border-white/15 lg:pl-8">
-            {[[Mail, "aadhinarayanan23r@gmail.com", "mailto:aadhinarayanan23r@gmail.com"], [MessageCircle, "+91 72000 16636", "https://wa.me/917200016636"], [Linkedin, "Aadhi Narayanan R", "https://www.linkedin.com/in/aadhi-narayanan-80093332a"], [Instagram, "@7s_thunder", "https://instagram.com/7s_thunder"]].map(([Icon, text, href]) => {
+            {[[Mail, "aadhinarayanan23r@gmail.com", "mailto:aadhinarayanan23r@gmail.com"], [WhatsApp, "+91 72000 16636", "https://wa.me/917200016636"], [Linkedin, "Aadhi Narayanan R", "https://www.linkedin.com/in/aadhi-narayanan-80093332a"], [Instagram, "@7s_thunder", "https://instagram.com/7s_thunder"]].map(([Icon, text, href]) => {
               const I = Icon as typeof Mail;
               const ext = !(href as string).startsWith("mailto:");
               return <li key={text as string}><a href={href as string} target={ext ? "_blank" : undefined} rel={ext ? "noopener noreferrer" : undefined} className="flex items-center gap-3 hover:text-white/70"><I size={16} />{text as string}</a></li>;
