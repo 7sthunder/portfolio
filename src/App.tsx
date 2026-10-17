@@ -236,11 +236,10 @@ export default function App() {
             <p className="mb-6 font-display text-xs font-semibold tracking-widest text-muted">SOFTWARE ENGINEER · FULL-STACK · APPLIED AI</p>
             {/* Sized in vw, not steps: the headline is one line per phrase and
                 each line is its own mask, so a fixed step either overflows the
-                column on a laptop or pushes a phone into a two-line wrap. The
-                ramp is capped by the narrowest two-column case, lg, where the
-                copy column is ~400px — 5vw leaves about a sixth of that spare
-                for the widest line. */}
-            <h1 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[1.05] tracking-tight">
+                column on a laptop or pushes a phone into a two-line wrap. Poppins
+                runs wide, so the floor drops to 34px below 360px, where 40px
+                wraps "for real people." onto two lines in a 280px column. */}
+            <h1 className="font-display text-[clamp(2.125rem,5vw,4.5rem)] font-bold leading-[1.05] tracking-tight min-[360px]:text-[clamp(2.5rem,5vw,4.5rem)]">
               {headline.map((l, i) => (
                 <span key={l} className="block overflow-hidden pb-1.5">
                   {/* The payload of the sentence takes the heaviest weight; the
