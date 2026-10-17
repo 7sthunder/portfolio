@@ -14,7 +14,7 @@
   --color-wine-dark: #6e1414;
   --color-night: #15171c;
 }
-html { scroll-behavior: smooth; }
-body { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+body { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
 :focus-visible { outline: 2px solid var(--color-wine); outline-offset: 3px; border-radius: 4px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }

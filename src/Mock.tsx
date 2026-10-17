@@ -80,7 +80,14 @@ export function Tilt({ children }: { children: React.ReactNode }) {
     <motion.div
       ref={ref}
       style={{ rotateX: rx, rotateY: ry, transformPerspective: 1200 }}
-      onPointerMove={(e) => { const r = ref.current!.getBoundingClientRect(); x.set((e.clientX - r.left) / r.width - 0.5); y.set((e.clientY - r.top) / r.height - 0.5); }}
+      onPointerMove={(e) => {
+        // Mouse only: on touch, pointermove keeps firing while the finger
+        // scrolls, which swung the mock around mid-scroll.
+        if (e.pointerType !== "mouse") return;
+        const r = ref.current!.getBoundingClientRect();
+        x.set((e.clientX - r.left) / r.width - 0.5);
+        y.set((e.clientY - r.top) / r.height - 0.5);
+      }}
       onPointerLeave={() => { x.set(0); y.set(0); }}
     >{children}</motion.div>
   );
