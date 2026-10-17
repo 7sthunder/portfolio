@@ -42,7 +42,7 @@ function CaseStudy({ p, n, lead }: { p: Project; n: string; lead?: boolean }) {
       <div>
         <span className="rounded bg-wine/10 px-2 py-1 text-xs text-wine">{lead ? "Featured project" : "Case study"}</span>
         <div className="mt-4 text-sm text-wine">{n}</div>
-        <h3 className="font-serif text-3xl leading-tight sm:text-4xl">{p.title}</h3>
+        <h3 className="text-3xl leading-tight sm:text-4xl">{p.title}</h3>
         <p className="mt-3 text-xs tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p>
         <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-muted">{p.blurb}</p>
         {p.highlights && (
@@ -156,7 +156,7 @@ function ProjectRow({ p, i, open, onEnter, onLeave, onToggle }: {
           <div ref={row}>
             <a href="#" className="group grid grid-cols-[1.75rem_minmax(0,1fr)] items-center gap-x-4 gap-y-4 py-6 md:grid-cols-[2.5rem_minmax(0,1fr)_11rem] md:gap-x-6 xl:grid-cols-[2.5rem_minmax(0,13rem)_minmax(0,1fr)_15rem]">
               <span className="col-start-1 row-start-1 text-sm text-wine">{n}</span>
-              <div className="col-start-2 row-start-1"><h3 className="font-serif text-2xl">{p.title}</h3><p className="mt-1 text-[11px] tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p></div>
+              <div className="col-start-2 row-start-1"><h3 className="text-2xl">{p.title}</h3><p className="mt-1 text-[11px] tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p></div>
               {/* Explicit placement instead of source order: the summary drops
                   under the title on a phone and only pulls alongside it once
                   there is a track spare for it. Source order alone left the
@@ -222,7 +222,7 @@ export default function App() {
     <>
       <header className="sticky top-0 z-50 border-b border-line/60 bg-paper/80 backdrop-blur">
         <div className={`${wrap} flex h-16 items-center justify-between`}>
-          <a href="#" className="font-serif text-xl">Aadhi Narayanan R</a>
+          <a href="#" className="text-xl">Aadhi Narayanan R</a>
           {/* Tighter tracking and gaps from md up: five links plus the status
               pill do not fit on one line at 768px at full size. */}
           <nav className="hidden gap-5 text-xs text-muted md:flex lg:gap-8 lg:text-sm">{nav.map((n) => <a key={n} href={`#${n.toLowerCase()}`} className="transition hover:text-wine">{n}</a>)}</nav>
@@ -234,13 +234,13 @@ export default function App() {
         {/* Hero */}
         <section id="about" className={`${wrap} grid items-center gap-10 py-14 sm:gap-12 sm:py-16 lg:grid-cols-[1fr_1.2fr] lg:py-24`}>
           <div>
-            <p className="mb-6 font-display text-xs font-semibold tracking-widest text-muted">SOFTWARE ENGINEER · FULL-STACK · APPLIED AI</p>
+            <p className="mb-6 text-xs font-semibold tracking-widest text-muted">SOFTWARE ENGINEER · FULL-STACK · APPLIED AI</p>
             {/* Sized in vw, not steps: the headline is one line per phrase and
                 each line is its own mask, so a fixed step either overflows the
                 column on a laptop or pushes a phone into a two-line wrap. Poppins
                 runs wide, so the floor drops to 34px below 360px, where 40px
                 wraps "for real people." onto two lines in a 280px column. */}
-            <h1 className="font-display text-[clamp(2.125rem,5vw,4.5rem)] font-bold leading-[1.05] tracking-tight min-[360px]:text-[clamp(2.5rem,5vw,4.5rem)]">
+            <h1 className="text-[clamp(2.125rem,5vw,4.5rem)] font-bold leading-[1.05] tracking-tight min-[360px]:text-[clamp(2.5rem,5vw,4.5rem)]">
               {headline.map((l, i) => (
                 <span key={l} className="block overflow-hidden pb-1.5">
                   {/* The payload of the sentence takes the heaviest weight; the
@@ -250,7 +250,7 @@ export default function App() {
               ))}
             </h1>
             <p className="mt-6 max-w-md text-[15px] leading-relaxed text-muted">I'm <b className="font-semibold text-ink">Aadhi Narayanan R</b> — a software developer with <b className="font-semibold text-ink">6+ months of hands-on internship experience at A S CodeLabs</b>, working on real-world business applications, alongside independent projects in AI, machine learning, and full-stack engineering.</p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3"><Button solid href="#projects" className="font-display font-semibold">Explore my work</Button><Button href="#contact" className="font-display font-semibold">Get in touch</Button></div>
+            <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3"><Button solid href="#projects" className="font-semibold">Explore my work</Button><Button href="#contact" className="font-semibold">Get in touch</Button></div>
             <div className="mt-8 flex gap-5">
               {[[Linkedin, "https://linkedin.com/in/aadhi-narayanan-80093332", "LinkedIn"], [Github, "https://github.com/", "GitHub"], [Instagram, "https://instagram.com/7s_thunder", "Instagram"], [Mail, "mailto:aadhinarayanan23@gmail.com", "Email"]].map(([Icon, href, name]) => {
                 const I = Icon as typeof Mail; return <a key={name as string} href={href as string} aria-label={name as string} className="transition hover:-translate-y-0.5 hover:text-wine"><I size={20} /></a>;
@@ -281,11 +281,11 @@ export default function App() {
           <div className={`${wrap} grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1.2fr_1.4fr]`}>
             {stats.map((s) => (
               <div key={s.sub} className="lg:border-r lg:border-line">
-                <div className="font-serif text-4xl text-wine"><Count to={s.n} suffix={s.suffix} /></div>
+                <div className="text-4xl text-wine"><Count to={s.n} suffix={s.suffix} /></div>
                 <div className="mt-1 text-sm font-medium">{s.label}</div><div className="text-sm text-muted">{s.sub}</div>
               </div>
             ))}
-            <div className="lg:border-r lg:border-line"><div className="font-serif text-3xl text-wine">Full-stack</div><div className="text-sm text-muted">Frontend · Backend<br />AI · Infrastructure</div></div>
+            <div className="lg:border-r lg:border-line"><div className="text-3xl text-wine">Full-stack</div><div className="text-sm text-muted">Frontend · Backend<br />AI · Infrastructure</div></div>
             <div className="text-sm text-muted">Exploring how technology can solve practical problems and make a meaningful impact.<a href="#experience" className="mt-3 flex items-center gap-1 text-wine">More about me <ArrowRight size={14} /></a></div>
           </div>
         </section>
@@ -307,7 +307,7 @@ export default function App() {
               <article key={p.title} className={`grid items-center gap-6 sm:grid-cols-2 ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
                 <div>
                   {p.status && <span className="mb-2 inline-block rounded bg-blue-100 px-2 py-0.5 text-[10px] text-blue-700">{p.status}</span>}
-                  <h3 className="font-serif text-2xl sm:text-3xl">{p.title}</h3>
+                  <h3 className="text-2xl sm:text-3xl">{p.title}</h3>
                   <p className="mt-1 text-sm font-medium">{p.sub}</p>
                   <p className="mt-2 text-sm text-muted">{p.blurb}</p>
                   <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
@@ -322,7 +322,7 @@ export default function App() {
         {/* Skills */}
         <section id="skills" className={`${wrap} border-t border-line py-16`}>
           <p className={`${label} mb-3`}>TECH STACK</p>
-          <h2 className="font-serif text-3xl leading-tight sm:text-4xl">Technologies I work with.<br />Systems I want to understand better.</h2>
+          <h2 className="text-3xl leading-tight sm:text-4xl">Technologies I work with.<br />Systems I want to understand better.</h2>
           <div className="mt-10 grid gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
             {Object.entries(stack).map(([group, items]) => (
               <div key={group}>
@@ -337,7 +337,7 @@ export default function App() {
       {/* Contact */}
       <footer id="contact" className="bg-night text-white">
         <div className={`${wrap} grid gap-10 py-16 lg:grid-cols-[1.2fr_1.2fr_1fr]`}>
-          <div><p className="mb-3 text-xs tracking-widest text-white/60">● GET IN TOUCH</p><h2 className="font-serif text-3xl leading-tight sm:text-4xl">Have a useful problem<br />to solve? Let's talk.</h2></div>
+          <div><p className="mb-3 text-xs tracking-widest text-white/60">● GET IN TOUCH</p><h2 className="text-3xl leading-tight sm:text-4xl">Have a useful problem<br />to solve? Let's talk.</h2></div>
           <p className="self-center text-sm leading-relaxed text-white/70">I'm always interested in discussing software engineering, practical AI applications, challenging technical problems, and opportunities to build useful products.</p>
           <ul className="space-y-4 text-sm lg:border-l lg:border-white/15 lg:pl-8">
             {[[Mail, "aadhinarayanan23r@gmail.com", "mailto:aadhinarayanan23r@gmail.com"], [WhatsApp, "+91 72000 16636", "https://wa.me/917200016636"], [Linkedin, "Aadhi Narayanan R", "https://www.linkedin.com/in/aadhi-narayanan-80093332a"], [Instagram, "@7s_thunder", "https://instagram.com/7s_thunder"]].map(([Icon, text, href]) => {

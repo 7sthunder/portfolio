@@ -1,12 +1,9 @@
 @import "tailwindcss";
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Newsreader", Georgia, serif;
-  /* Hero display face. A geometric sans holds its own at 72px, where the
-     serif's thin strokes start to wash out; Inter is kept as the fallback so a
-     blocked or slow webfont still lands on the site's own sans.
-     Only the three weights the hero actually uses are loaded. */
-  --font-display: "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* One family site-wide. Poppins is a geometric sans, so the headings that
+     carried the Newsreader serif now earn their hierarchy from size and the
+     wine accents alone instead of a second typeface. */
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --color-paper: #faf7f2;
   --color-ink: #17181c;
   --color-muted: #5f6066;
