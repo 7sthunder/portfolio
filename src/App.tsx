@@ -316,9 +316,9 @@ export default function App() {
           {/* Both tiers step at once, and both wait for xl: a two-up outer grid
               under a two-up article leaves about 220px for the copy, which
               reads worse than one full-width article per row. */}
-          <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:gap-0 xl:transition-[grid-template-columns] xl:duration-500 xl:ease-out xl:has-[article:first-child:hover]:grid-cols-[minmax(0,4fr)_minmax(0,1fr)] xl:has-[article:last-child:hover]:grid-cols-[minmax(0,1fr)_minmax(0,4fr)] xl:has-[article:first-child:hover]:[&>article:last-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:first-child:hover]:[&>article:last-child]:gap-0 xl:has-[article:last-child:hover]:[&>article:first-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:last-child:hover]:[&>article:first-child]:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:opacity-0 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:opacity-0">
+          <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:gap-0 xl:transition-[grid-template-columns] xl:duration-700 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none xl:has-[article:first-child:hover]:grid-cols-[minmax(0,4fr)_minmax(0,1fr)] xl:has-[article:last-child:hover]:grid-cols-[minmax(0,1fr)_minmax(0,4fr)] xl:has-[article:first-child:hover]:[&>article:last-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:first-child:hover]:[&>article:last-child]:gap-0 xl:has-[article:last-child:hover]:[&>article:first-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:last-child:hover]:[&>article:first-child]:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:opacity-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:scale-95 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:opacity-0 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:scale-95">
             {independent.map((p, i) => (
-              <article key={p.title} className={`grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:transition-[grid-template-columns,gap] xl:duration-500 xl:ease-out ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
+              <article key={p.title} className={`grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:transition-[grid-template-columns,gap] xl:duration-700 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
                 <div>
                   {p.status && <span className="mb-2 inline-block rounded bg-blue-100 px-2 py-0.5 text-[10px] text-blue-700">{p.status}</span>}
                   <h3 className="text-2xl sm:text-3xl">{p.title}</h3>
@@ -327,7 +327,7 @@ export default function App() {
                   <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
                   <a href="#" className="mt-5 inline-flex items-center gap-1 text-sm text-wine">{p.cta}<ArrowUpRight size={15} /></a>
                 </div>
-                <div className="card-visual min-w-0 overflow-hidden transition-opacity duration-500">{p.status ? <Phone /> : <Window kind="dash" className="aspect-[4/3] xl:aspect-[16/10]" />}</div>
+                <div className="card-visual min-w-0 overflow-hidden transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none">{p.status ? <Phone /> : <Window kind="dash" className="aspect-[4/3] xl:aspect-[16/10]" />}</div>
               </article>
             ))}
           </div>
