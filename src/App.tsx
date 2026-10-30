@@ -316,7 +316,7 @@ export default function App() {
           {/* Both tiers step at once, and both wait for xl: a two-up outer grid
               under a two-up article leaves about 220px for the copy, which
               reads worse than one full-width article per row. */}
-          <div className="grid gap-12 xl:grid-cols-2 xl:gap-0">
+          <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:gap-0 xl:transition-[grid-template-columns] xl:duration-500 xl:ease-out xl:has-[article:first-child:hover]:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] xl:has-[article:last-child:hover]:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)]">
             {independent.map((p, i) => (
               <article key={p.title} className={`grid items-center gap-6 sm:grid-cols-2 ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
                 <div>
