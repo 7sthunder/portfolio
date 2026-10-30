@@ -327,7 +327,7 @@ export default function App() {
                   <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
                   <a href="#" className="mt-5 inline-flex items-center gap-1 text-sm text-wine">{p.cta}<ArrowUpRight size={15} /></a>
                 </div>
-                {i === 0 ? <Window kind="dash" className="aspect-[4/3]" /> : <Phone />}
+                {p.status ? <Phone /> : <Window kind="dash" className="aspect-[4/3]" />}
               </article>
             ))}
           </div>

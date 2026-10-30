@@ -40,8 +40,8 @@ export const more: Project[] = [
     ] },
 ];
 export const independent = [
-  { title: "DocuVerify", sub: "Explainable Document Tamper Detection", blurb: "Analyses PDFs and images for potential tampering, produces a suspicion score, and highlights suspicious regions with evidence-backed explanations.", tags: ["Python", "OpenCV", "FastAPI", "React"], cta: "View Case Study", status: "" },
   { title: "MediTrack AI", sub: "AI-Assisted Medication Adherence", blurb: "A planned medication tracking platform with reminders, adherence analytics and supportive AI insights.", tags: ["Next.js", "tRPC", "PostgreSQL"], cta: "View Concept", status: "In development" },
+  { title: "DocuVerify", sub: "Explainable Document Tamper Detection", blurb: "Analyses PDFs and images for potential tampering, produces a suspicion score, and highlights suspicious regions with evidence-backed explanations.", tags: ["Python", "OpenCV", "FastAPI", "React"], cta: "View Case Study", status: "" },
 ];
 export const stack: Record<string, string[]> = {
   Frontend: ["React", "Next.js", "TypeScript", "TanStack Router", "TanStack Query", "Tailwind CSS", "shadcn/ui", "Astro", "React Native", "Expo"],
