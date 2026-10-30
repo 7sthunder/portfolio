@@ -316,7 +316,7 @@ export default function App() {
           {/* Both tiers step at once, and both wait for xl: a two-up outer grid
               under a two-up article leaves about 220px for the copy, which
               reads worse than one full-width article per row. */}
-          <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:gap-0 xl:transition-[grid-template-columns] xl:duration-500 xl:ease-out xl:has-[article:first-child:hover]:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] xl:has-[article:last-child:hover]:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)] xl:has-[article:first-child:hover]:[&>article:last-child]:grid-cols-1 xl:has-[article:last-child:hover]:[&>article:first-child]:grid-cols-1 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:hidden xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:hidden">
+          <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:gap-0 xl:transition-[grid-template-columns] xl:duration-500 xl:ease-out xl:has-[article:first-child:hover]:grid-cols-[minmax(0,4fr)_minmax(0,1fr)] xl:has-[article:last-child:hover]:grid-cols-[minmax(0,1fr)_minmax(0,4fr)] xl:has-[article:first-child:hover]:[&>article:last-child]:grid-cols-1 xl:has-[article:last-child:hover]:[&>article:first-child]:grid-cols-1 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:hidden xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:hidden">
             {independent.map((p, i) => (
               <article key={p.title} className={`grid items-center gap-6 sm:grid-cols-2 ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
                 <div>
@@ -327,7 +327,7 @@ export default function App() {
                   <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
                   <a href="#" className="mt-5 inline-flex items-center gap-1 text-sm text-wine">{p.cta}<ArrowUpRight size={15} /></a>
                 </div>
-                <div className="card-visual">{p.status ? <Phone /> : <Window kind="dash" className="aspect-[4/3]" />}</div>
+                <div className="card-visual">{p.status ? <Phone /> : <Window kind="dash" className="aspect-[4/3] xl:aspect-[16/10]" />}</div>
               </article>
             ))}
           </div>
