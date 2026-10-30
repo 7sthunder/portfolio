@@ -22,8 +22,8 @@ function Count({ to, suffix = "" }: { to: number; suffix?: string }) {
   return <span ref={ref}>{out}{suffix}</span>;
 }
 
-const Button = ({ children, href, solid, className = "" }: { children: React.ReactNode; href: string; solid?: boolean; className?: string }) => (
-  <a href={href} className={`group inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-medium transition ${solid ? "bg-wine text-white shadow-lg shadow-wine/25 hover:bg-wine-dark" : "text-ink hover:text-wine"} ${className}`}>
+const Button = ({ children, href, solid, className = "", onClick }: { children: React.ReactNode; href: string; solid?: boolean; className?: string; onClick?: React.MouseEventHandler<HTMLAnchorElement> }) => (
+  <a href={href} onClick={onClick} className={`group inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-medium transition ${solid ? "bg-wine text-white shadow-lg shadow-wine/25 hover:bg-wine-dark" : "text-ink hover:text-wine"} ${className}`}>
     {children}<ArrowRight size={15} className="transition group-hover:translate-x-1" />
   </a>
 );
@@ -54,7 +54,7 @@ function CaseStudy({ p, n, lead }: { p: Project; n: string; lead?: boolean }) {
         )}
         <div className="mt-5 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
         <div className="mt-6 flex flex-wrap items-center gap-5">
-          <Button solid href="#">View Case Study</Button>
+          <Button solid href="#" onClick={(e) => e.preventDefault()}>View Case Study</Button>
           {p.live && <a href={p.live} target="_blank" rel="noreferrer" className="group inline-flex items-center gap-1.5 text-sm text-wine">Live site<ArrowUpRight size={15} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></a>}
         </div>
       </div>
@@ -74,6 +74,7 @@ function CaseStudy({ p, n, lead }: { p: Project; n: string; lead?: boolean }) {
  */
 const GROW_MS = 600;
 const GROW_EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
+const canHover = () => window.matchMedia("(hover: hover)").matches;
 
 /**
  * A project row. Collapsed it is the compact summary line; hovering — or
@@ -93,9 +94,9 @@ const GROW_EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
  * versions of a project being visible at once. Touch devices have no hover, so
  * there the row is a tap toggle instead.
  */
-function ProjectRow({ p, i, open, onEnter, onLeave, onToggle }: {
+function ProjectRow({ p, i, open, onEnter, onLeave, onActivate }: {
   p: Project; i: number; open: boolean;
-  onEnter: () => void; onLeave: () => void; onToggle: () => void;
+  onEnter: () => void; onLeave: () => void; onActivate: () => void;
 }) {
   const box = useRef<HTMLDivElement>(null);
   const row = useRef<HTMLDivElement>(null);
@@ -104,7 +105,6 @@ function ProjectRow({ p, i, open, onEnter, onLeave, onToggle }: {
   const held = useRef(0);
   const running = useRef(false);
   const n = `0${i + 1}`;
-  const canHover = () => window.matchMedia("(hover: hover)").matches;
 
   useLayoutEffect(() => {
     const el = box.current!, to = (open ? wide.current! : row.current!).offsetHeight;
@@ -140,13 +140,13 @@ function ProjectRow({ p, i, open, onEnter, onLeave, onToggle }: {
       role="button"
       tabIndex={0}
       aria-expanded={open}
-      className="cursor-pointer touch-manipulation border-b border-line"
+      className="cursor-pointer touch-manipulation border-b border-line rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-wine"
       onPointerEnter={() => { if (canHover()) onEnter(); }}
       onPointerLeave={() => { if (canHover()) onLeave(); }}
-      onFocus={onEnter}
+      onFocus={() => { if (canHover()) onEnter(); }}
       onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onLeave(); }}
-      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onToggle(); } }}
-      onClick={() => { if (!canHover()) onToggle(); }}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onActivate(); } }}
+      onClick={onActivate}
     >
       {/* Centred while closing so the box closes around the row rather than
           leaving a gap under it; top-anchored while opening so the case study
@@ -154,7 +154,7 @@ function ProjectRow({ p, i, open, onEnter, onLeave, onToggle }: {
       <div ref={box} className={`relative flex overflow-hidden ${open ? "items-start" : "items-center"}`}>
         <div inert={open} className={`w-full transition-opacity ${open ? "pointer-events-none absolute inset-x-0 top-0 opacity-0 duration-150" : "opacity-100 duration-300"}`}>
           <div ref={row}>
-            <a href="#" className="group grid grid-cols-[1.75rem_minmax(0,1fr)] items-center gap-x-4 gap-y-4 py-6 md:grid-cols-[2.5rem_minmax(0,1fr)_11rem] md:gap-x-6 xl:grid-cols-[2.5rem_minmax(0,13rem)_minmax(0,1fr)_15rem]">
+            <div className="group grid grid-cols-[1.75rem_minmax(0,1fr)] items-center gap-x-4 gap-y-4 py-6 md:grid-cols-[2.5rem_minmax(0,1fr)_11rem] md:gap-x-6 xl:grid-cols-[2.5rem_minmax(0,13rem)_minmax(0,1fr)_15rem]">
               <span className="col-start-1 row-start-1 text-sm text-wine">{n}</span>
               <div className="col-start-2 row-start-1"><h3 className="text-2xl">{p.title}</h3><p className="mt-1 text-[11px] tracking-widest text-muted">A S CODELABS · INTERNSHIP PROJECT</p></div>
               {/* Explicit placement instead of source order: the summary drops
@@ -169,10 +169,10 @@ function ProjectRow({ p, i, open, onEnter, onLeave, onToggle }: {
                 <div className="min-w-0 flex-1 overflow-hidden rounded-lg transition duration-500 group-hover:scale-[1.04] group-hover:-rotate-1">{p.shot ? <ShotThumb src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind={p.kind} className="h-24 !rounded-lg" />}</div>
                 <ArrowRight className="shrink-0 text-muted transition group-hover:translate-x-1 group-hover:text-wine" />
               </div>
-            </a>
+            </div>
           </div>
         </div>
-        <div inert={!open} className={`w-full transition-opacity ${open ? "opacity-100 duration-400 delay-150" : "pointer-events-none absolute inset-x-0 top-0 opacity-0 duration-150"}`}>
+        <div inert={!open} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} className={`w-full transition-opacity ${open ? "opacity-100 duration-400 delay-150" : "pointer-events-none absolute inset-x-0 top-0 opacity-0 duration-150"}`}>
           <div ref={wide} className="pb-10 pt-2"><CaseStudy p={p} n={n} lead={!i} /></div>
         </div>
       </div>
@@ -193,15 +193,29 @@ function ProjectList({ items }: { items: Project[] }) {
   const [open, setOpen] = useState<number | null>(null);
   const last = useRef<number | null>(null);
   const closing = useRef<number | undefined>(undefined);
+  // A click on a hover device pins the row open so it stays put while the
+  // pointer reads the case study. Entering a different row releases the pin.
+  const pinned = useRef<number | null>(null);
   useEffect(() => () => clearTimeout(closing.current), []);
   // Entering always wins: it clears any pending close, so a handoff collapses
   // the row being left right away instead of leaving both open for a beat.
-  const enter = (i: number) => { last.current = i; clearTimeout(closing.current); setOpen(i); };
+  const enter = (i: number) => {
+    last.current = i;
+    clearTimeout(closing.current);
+    if (pinned.current !== null && pinned.current !== i) pinned.current = null;
+    setOpen(i);
+  };
   // Leaving is only debounced when nothing took over, which is the case that
   // needs it: the pointer skimming the bottom edge of a tall expanded panel.
   const leave = (i: number) => {
-    if (last.current !== i) return;
+    if (last.current !== i || pinned.current === i) return;
     closing.current = window.setTimeout(() => setOpen((cur) => (cur === i ? null : cur)), 100);
+  };
+  const activate = (i: number) => {
+    if (!canHover()) { setOpen((cur) => (cur === i ? null : i)); return; }
+    pinned.current = pinned.current === i ? null : i;
+    clearTimeout(closing.current);
+    setOpen(i);
   };
   return (
     <>
@@ -209,7 +223,7 @@ function ProjectList({ items }: { items: Project[] }) {
         <ProjectRow
           key={p.title} p={p} i={i} open={open === i}
           onEnter={() => enter(i)} onLeave={() => leave(i)}
-          onToggle={() => setOpen((cur) => (cur === i ? null : i))}
+          onActivate={() => activate(i)}
         />
       ))}
     </>
