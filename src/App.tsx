@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useMotionValue } from "motion/react";
 import { ArrowRight, ArrowUpRight, Github, Instagram, Linkedin, Mail } from "lucide-react";
-import { featured, independent, more, stack, stats, type Project } from "./data";
+import { featured, independent, more, stack, stats, type Independent, type Project } from "./data";
 import { Phone, Shot, ShotThumb, Tilt, Window } from "./Mock";
 import portHero from "./assets/port_hero.png";
 
@@ -230,6 +230,67 @@ function ProjectList({ items }: { items: Project[] }) {
   );
 }
 
+/**
+ * Independent projects. On xl the hovered card grows and its neighbour folds
+ * away, which reflows the neighbour's copy and changes the row's height, and
+ * that shoves the section below. So the row is given the tallest height it
+ * reaches in any hover state. Each state is measured by applying its inline
+ * styles, reading the height, then restoring, so the row never changes height
+ * on hover and the surrounding sections stay put.
+ */
+function IndependentList({ items }: { items: Independent[] }) {
+  const box = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const el = box.current!;
+    const wide = window.matchMedia("(min-width: 80rem)");
+    const measure = () => {
+      el.style.minHeight = "";
+      if (!wide.matches) return;
+      const cards = Array.from(el.children) as HTMLElement[];
+      const pick = (hot: number) => cards.forEach((c, i) => {
+        const folded = hot >= 0 && i !== hot;
+        c.style.transition = "none";
+        c.style.flexGrow = hot === i ? "4" : "1";
+        c.style.gridTemplateColumns = folded ? "minmax(0,1fr) 0px" : "";
+        c.style.gap = folded ? "0px" : "";
+      });
+      let tallest = 0;
+      for (const hot of [-1, ...cards.map((_, i) => i)]) {
+        pick(hot);
+        tallest = Math.max(tallest, el.offsetHeight);
+      }
+      cards.forEach((c) => { c.style.flexGrow = ""; c.style.gridTemplateColumns = ""; c.style.gap = ""; });
+      void el.offsetHeight; // settle the restored styles while transitions are still off
+      cards.forEach((c) => { c.style.transition = ""; });
+      el.style.minHeight = tallest + "px";
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    document.fonts?.ready.then(measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [items]);
+  return (
+    // Both tiers step at once, and both wait for xl: a two-up outer grid
+    // under a two-up article leaves about 220px for the copy, which
+    // reads worse than one full-width article per row.
+    <div ref={box} className="grid gap-12 xl:flex xl:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:first-child:hover]:[&>article:last-child]:gap-0 xl:has-[article:last-child:hover]:[&>article:first-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:last-child:hover]:[&>article:first-child]:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:opacity-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:scale-95 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:opacity-0 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:scale-95">
+      {items.map((p, i) => (
+        <article key={p.title} className={`grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:min-w-0 xl:flex-1 xl:basis-0 xl:[contain:layout] xl:transition-[flex-grow,grid-template-columns,gap] xl:duration-700 xl:ease-[cubic-bezier(0.22,1,0.36,1)] xl:hover:grow-4 motion-reduce:transition-none ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
+          <div>
+            {p.status && <span className="mb-2 inline-block rounded bg-blue-100 px-2 py-0.5 text-[10px] text-blue-700">{p.status}</span>}
+            <h3 className="text-2xl sm:text-3xl">{p.title}</h3>
+            <p className="mt-1 text-sm font-medium">{p.sub}</p>
+            <p className="mt-2 text-sm text-muted">{p.blurb}</p>
+            <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
+            <a href="#" className="mt-5 inline-flex items-center gap-1 text-sm text-wine">{p.cta}<ArrowUpRight size={15} /></a>
+          </div>
+          <div className="card-visual min-w-0 overflow-hidden transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none">{p.status ? <Phone /> : <Window kind="dash" className="aspect-[4/3] xl:aspect-[16/10]" />}</div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 export default function App() {
   const headline = ["Building", "useful software", "for real people."];
   return (
@@ -313,24 +374,7 @@ export default function App() {
         {/* Independent */}
         <section id="experience" className={`${wrap} border-t border-line py-16`}>
           <p className={`${label} mb-6`}>INDEPENDENT PROJECTS</p>
-          {/* Both tiers step at once, and both wait for xl: a two-up outer grid
-              under a two-up article leaves about 220px for the copy, which
-              reads worse than one full-width article per row. */}
-          <div className="grid gap-12 xl:flex xl:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:first-child:hover]:[&>article:last-child]:gap-0 xl:has-[article:last-child:hover]:[&>article:first-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:last-child:hover]:[&>article:first-child]:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:opacity-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:scale-95 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:opacity-0 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:scale-95">
-            {independent.map((p, i) => (
-              <article key={p.title} className={`grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:min-w-0 xl:flex-1 xl:basis-0 xl:[contain:layout] xl:transition-[flex-grow,grid-template-columns,gap] xl:duration-700 xl:ease-[cubic-bezier(0.22,1,0.36,1)] xl:hover:grow-4 motion-reduce:transition-none ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
-                <div>
-                  {p.status && <span className="mb-2 inline-block rounded bg-blue-100 px-2 py-0.5 text-[10px] text-blue-700">{p.status}</span>}
-                  <h3 className="text-2xl sm:text-3xl">{p.title}</h3>
-                  <p className="mt-1 text-sm font-medium">{p.sub}</p>
-                  <p className="mt-2 text-sm text-muted">{p.blurb}</p>
-                  <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
-                  <a href="#" className="mt-5 inline-flex items-center gap-1 text-sm text-wine">{p.cta}<ArrowUpRight size={15} /></a>
-                </div>
-                <div className="card-visual min-w-0 overflow-hidden transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none">{p.status ? <Phone /> : <Window kind="dash" className="aspect-[4/3] xl:aspect-[16/10]" />}</div>
-              </article>
-            ))}
-          </div>
+          <IndependentList items={independent} />
         </section>
 
         {/* Skills */}
