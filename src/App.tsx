@@ -281,7 +281,7 @@ function IndependentList({ items }: { items: Independent[] }) {
     // reads worse than one full-width article per row.
     <div ref={box} className="grid gap-12 xl:flex xl:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:first-child:hover]:[&>article:last-child]:gap-0 xl:has-[article:last-child:hover]:[&>article:first-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:last-child:hover]:[&>article:first-child]:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:opacity-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:scale-95 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:opacity-0 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:scale-95">
       {items.map((p, i) => (
-        <article key={p.title} onPointerEnter={() => setPhase({ i, dir: "in" })} onPointerLeave={() => setPhase({ i, dir: "out" })} className={`group grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:min-w-[30rem] xl:flex-1 xl:basis-0 xl:[contain:layout] xl:transition-[flex-grow,gap] xl:duration-700 xl:ease-[cubic-bezier(0.22,1,0.36,1)] xl:hover:grow-4 motion-reduce:transition-none ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
+        <article key={p.title} onPointerEnter={() => setPhase({ i, dir: "in" })} onPointerLeave={() => setPhase({ i, dir: "out" })} className={`group grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:min-w-[30rem] xl:flex-1 xl:basis-0 xl:[contain:layout] xl:transition-[flex-grow,gap] xl:duration-700 xl:ease-[cubic-bezier(0.4,0,0.2,1)] xl:hover:grow-4 motion-reduce:transition-none ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
           <div>
             {p.status && <span className="mb-2 inline-block rounded bg-blue-100 px-2 py-0.5 text-[10px] text-blue-700">{p.status}</span>}
             <h3 className="text-2xl sm:text-3xl">{p.title}</h3>
@@ -290,14 +290,14 @@ function IndependentList({ items }: { items: Independent[] }) {
               const on = phase?.i === i ? phase.dir : null;
               return (
                 <span key={j}>
-                  <span className={`inline-block ${on ? `word-${on}` : ""}`} style={{ "--d": `${(on === "out" ? words.length - 1 - j : j) * 25}ms` } as React.CSSProperties}>{w}</span>{" "}
+                  <span className={`inline-block ${on ? `word-${on}` : ""}`} style={{ "--d": `${(on === "out" ? words.length - 1 - j : j) * 15}ms` } as React.CSSProperties}>{w}</span>{" "}
                 </span>
               );
             })}</p>
             <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
             <a href="#" className="mt-5 inline-flex items-center gap-1 text-sm text-wine">{p.cta}<ArrowUpRight size={15} /></a>
           </div>
-          <div className="card-visual min-w-0 overflow-hidden rounded-xl transition-[opacity,scale,rotate] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] group-hover:-rotate-1 motion-reduce:transition-none">{p.shot ? <Shot src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind="dash" className="aspect-[4/3] xl:aspect-[16/10]" />}</div>
+          <div className="card-visual min-w-0 overflow-hidden rounded-xl transition-[opacity,scale,rotate] duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-[1.04] group-hover:-rotate-1 motion-reduce:transition-none">{p.shot ? <Shot src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind="dash" className="aspect-[4/3] xl:aspect-[16/10]" />}</div>
         </article>
       ))}
     </div>

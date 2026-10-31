@@ -19,6 +19,6 @@ body { background: var(--color-paper); color: var(--color-ink); font-family: var
 @keyframes word-in { from { opacity: 0.25; transform: translateY(0.5em); } to { opacity: 1; transform: none; } }
 @keyframes word-out { 0% { opacity: 1; transform: none; } 40% { opacity: 0.25; transform: translateY(0.5em); } 100% { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: no-preference) {
-  .word-in { animation: word-in 600ms cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) both; }
-  .word-out { animation: word-out 500ms cubic-bezier(0.4, 0, 0.2, 1) var(--d, 0ms); }
+  .word-in { animation: word-in 400ms cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) both; }
+  .word-out { animation: word-out 350ms cubic-bezier(0.4, 0, 0.2, 1) var(--d, 0ms); }
 }
