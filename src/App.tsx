@@ -284,7 +284,7 @@ function IndependentList({ items }: { items: Independent[] }) {
             <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
             <a href="#" className="mt-5 inline-flex items-center gap-1 text-sm text-wine">{p.cta}<ArrowUpRight size={15} /></a>
           </div>
-          <div className="card-visual min-w-0 overflow-hidden rounded-xl transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform group-hover:scale-[1.04] group-hover:-rotate-1 motion-reduce:transition-none">{p.shot ? <Shot src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind="dash" className="aspect-[4/3] xl:aspect-[16/10]" />}</div>
+          <div className="card-visual min-w-0 overflow-hidden rounded-xl transition-[opacity,scale,rotate] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] group-hover:-rotate-1 motion-reduce:transition-none">{p.shot ? <Shot src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind="dash" className="aspect-[4/3] xl:aspect-[16/10]" />}</div>
         </article>
       ))}
     </div>
