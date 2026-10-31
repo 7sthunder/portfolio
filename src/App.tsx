@@ -248,18 +248,20 @@ function IndependentList({ items }: { items: Independent[] }) {
       el.style.minHeight = "";
       if (!wide.matches) return;
       const cards = Array.from(el.children) as HTMLElement[];
-      const pick = (hot: number, grow: number) => cards.forEach((c, i) => {
+      const pick = (flex: number[], hot: number) => cards.forEach((c, i) => {
         const folded = hot >= 0 && i !== hot;
         c.style.transition = "none";
-        c.style.flexGrow = hot === i ? String(grow) : "1";
+        c.style.flexGrow = String(flex[i]);
         c.style.gridTemplateColumns = folded ? "minmax(0,1fr) 0px" : "";
         c.style.gap = folded ? "0px" : "";
       });
+      const ratios = Array.from({ length: 9 }, (_, k) => 1 + (3 * k) / 8);
+      let combos: number[][] = [[]];
+      for (let i = 0; i < cards.length; i++) combos = combos.flatMap((c) => ratios.map((r) => [...c, r]));
       let tallest = 0;
       for (const hot of [-1, ...cards.map((_, i) => i)]) {
-        const steps = hot < 0 ? 0 : 16;
-        for (let k = 0; k <= steps; k++) {
-          pick(hot, 1 + (3 * k) / 16);
+        for (const flex of combos) {
+          pick(flex, hot);
           tallest = Math.max(tallest, el.offsetHeight);
         }
       }
@@ -279,7 +281,7 @@ function IndependentList({ items }: { items: Independent[] }) {
     // reads worse than one full-width article per row.
     <div ref={box} className="grid gap-12 xl:flex xl:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:first-child:hover]:[&>article:last-child]:gap-0 xl:has-[article:last-child:hover]:[&>article:first-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:last-child:hover]:[&>article:first-child]:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:opacity-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:scale-95 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:opacity-0 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:scale-95">
       {items.map((p, i) => (
-        <article key={p.title} onPointerEnter={() => setPhase({ i, dir: "in" })} onPointerLeave={() => setPhase({ i, dir: "out" })} className={`group grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:min-w-0 xl:flex-1 xl:basis-0 xl:[contain:layout] xl:transition-[flex-grow,gap] xl:duration-700 xl:ease-[cubic-bezier(0.22,1,0.36,1)] xl:hover:grow-4 motion-reduce:transition-none ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
+        <article key={p.title} onPointerEnter={() => setPhase({ i, dir: "in" })} onPointerLeave={() => setPhase({ i, dir: "out" })} className={`group grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:min-w-[30rem] xl:flex-1 xl:basis-0 xl:[contain:layout] xl:transition-[flex-grow,gap] xl:duration-700 xl:ease-[cubic-bezier(0.22,1,0.36,1)] xl:hover:grow-4 motion-reduce:transition-none ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
           <div>
             {p.status && <span className="mb-2 inline-block rounded bg-blue-100 px-2 py-0.5 text-[10px] text-blue-700">{p.status}</span>}
             <h3 className="text-2xl sm:text-3xl">{p.title}</h3>
