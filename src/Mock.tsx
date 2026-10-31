@@ -14,7 +14,7 @@ export function Shot({ src, alt, className = "" }: { src: string; alt: string; c
   return (
     <div className={`overflow-hidden rounded-xl border border-black/10 bg-white shadow-2xl shadow-black/20 ${className}`}>
       <div className="flex gap-1.5 bg-night px-3 py-2">{["#ff5f57", "#febc2e", "#28c840"].map((c) => <i key={c} className="size-2 rounded-full" style={{ background: c }} />)}</div>
-      <img src={`${import.meta.env.BASE_URL}${src}`} alt={alt} loading="lazy" decoding="async" className="block w-full" />
+      <img src={`${import.meta.env.BASE_URL}${src}`} alt={alt} loading="lazy" decoding="async" className="block aspect-[16/10] w-full object-cover object-top" />
     </div>
   );
 }

@@ -247,17 +247,20 @@ function IndependentList({ items }: { items: Independent[] }) {
       el.style.minHeight = "";
       if (!wide.matches) return;
       const cards = Array.from(el.children) as HTMLElement[];
-      const pick = (hot: number) => cards.forEach((c, i) => {
+      const pick = (hot: number, grow: number) => cards.forEach((c, i) => {
         const folded = hot >= 0 && i !== hot;
         c.style.transition = "none";
-        c.style.flexGrow = hot === i ? "4" : "1";
+        c.style.flexGrow = hot === i ? String(grow) : "1";
         c.style.gridTemplateColumns = folded ? "minmax(0,1fr) 0px" : "";
         c.style.gap = folded ? "0px" : "";
       });
       let tallest = 0;
       for (const hot of [-1, ...cards.map((_, i) => i)]) {
-        pick(hot);
-        tallest = Math.max(tallest, el.offsetHeight);
+        const steps = hot < 0 ? 0 : 16;
+        for (let k = 0; k <= steps; k++) {
+          pick(hot, 1 + (3 * k) / 16);
+          tallest = Math.max(tallest, el.offsetHeight);
+        }
       }
       cards.forEach((c) => { c.style.flexGrow = ""; c.style.gridTemplateColumns = ""; c.style.gap = ""; });
       void el.offsetHeight; // settle the restored styles while transitions are still off
@@ -275,12 +278,16 @@ function IndependentList({ items }: { items: Independent[] }) {
     // reads worse than one full-width article per row.
     <div ref={box} className="grid gap-12 xl:flex xl:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:first-child:hover]:[&>article:last-child]:gap-0 xl:has-[article:last-child:hover]:[&>article:first-child]:grid-cols-[minmax(0,1fr)_0px] xl:has-[article:last-child:hover]:[&>article:first-child]:gap-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:opacity-0 xl:has-[article:first-child:hover]:[&>article:last-child_.card-visual]:scale-95 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:opacity-0 xl:has-[article:last-child:hover]:[&>article:first-child_.card-visual]:scale-95">
       {items.map((p, i) => (
-        <article key={p.title} className={`group grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:min-w-0 xl:flex-1 xl:basis-0 xl:[contain:layout] xl:transition-[flex-grow,grid-template-columns,gap] xl:duration-700 xl:ease-[cubic-bezier(0.22,1,0.36,1)] xl:hover:grow-4 motion-reduce:transition-none ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
+        <article key={p.title} className={`group grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:min-w-0 xl:flex-1 xl:basis-0 xl:[contain:layout] xl:transition-[flex-grow,gap] xl:duration-700 xl:ease-[cubic-bezier(0.22,1,0.36,1)] xl:hover:grow-4 motion-reduce:transition-none ${i ? "xl:border-l xl:border-line xl:pl-12" : "xl:pr-12"}`}>
           <div>
             {p.status && <span className="mb-2 inline-block rounded bg-blue-100 px-2 py-0.5 text-[10px] text-blue-700">{p.status}</span>}
             <h3 className="text-2xl sm:text-3xl">{p.title}</h3>
             <p className="mt-1 text-sm font-medium">{p.sub}</p>
-            <p className="mt-2 text-sm text-muted">{p.blurb}</p>
+            <p className="mt-2 text-sm text-muted">{p.blurb.split(" ").map((w, j) => (
+              <span key={j}>
+                <span className="word-flow inline-block" style={{ "--d": `${j * 25}ms` } as React.CSSProperties}>{w}</span>{" "}
+              </span>
+            ))}</p>
             <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
             <a href="#" className="mt-5 inline-flex items-center gap-1 text-sm text-wine">{p.cta}<ArrowUpRight size={15} /></a>
           </div>
