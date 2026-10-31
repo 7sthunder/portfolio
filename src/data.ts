@@ -39,11 +39,11 @@ export const more: Project[] = [
       "Packing and dispatch with invoicing and payment tracking",
     ] },
 ];
-export type Independent = { title: string; sub: string; blurb: string; tags: string[]; cta: string; status?: string };
+export type Independent = { title: string; sub: string; blurb: string; tags: string[]; cta: string; status?: string; shot?: string; shotAlt?: string };
 
 export const independent: Independent[] = [
-  { title: "MediTrack AI", sub: "AI-Assisted Medication Adherence", blurb: "A planned medication tracking platform with reminders, adherence analytics and supportive AI insights.", tags: ["Next.js", "tRPC", "PostgreSQL"], cta: "View Concept", status: "In development" },
-  { title: "DocuVerify", sub: "Explainable Document Tamper Detection", blurb: "Analyses PDFs and images for potential tampering, produces a suspicion score, and highlights suspicious regions with evidence-backed explanations.", tags: ["Python", "OpenCV", "FastAPI", "React"], cta: "View Case Study", status: "" },
+  { title: "MediTrack AI", sub: "AI-Assisted Medication Adherence", blurb: "A planned medication tracking platform with reminders, adherence analytics and supportive AI insights.", tags: ["Next.js", "tRPC", "PostgreSQL"], cta: "View Concept", status: "In development", shot: "meditrack-ai.png", shotAlt: "MediTrackAI landing page with the One secure vault headline and app preview" },
+  { title: "DocuVerify", sub: "Explainable Document Tamper Detection", blurb: "Analyses PDFs and images for potential tampering, produces a suspicion score, and highlights suspicious regions with evidence-backed explanations.", tags: ["Python", "OpenCV", "FastAPI", "React"], cta: "View Case Study", status: "", shot: "docuverify-dashboard.png", shotAlt: "DocuVerify dashboard with the Verify Documents hero and an analysis summary showing a 62 out of 100 score" },
 ];
 export const stack: Record<string, string[]> = {
   Frontend: ["React", "Next.js", "TypeScript", "TanStack Router", "TanStack Query", "Tailwind CSS", "shadcn/ui", "Astro", "React Native", "Expo"],

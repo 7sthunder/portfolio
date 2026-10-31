@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useMotionValue } from "motion/react";
 import { ArrowRight, ArrowUpRight, Github, Instagram, Linkedin, Mail } from "lucide-react";
 import { featured, independent, more, stack, stats, type Independent, type Project } from "./data";
-import { Phone, Shot, ShotThumb, Tilt, Window } from "./Mock";
+import { Shot, ShotThumb, Tilt, Window } from "./Mock";
 import portHero from "./assets/port_hero.png";
 
 const nav = ["About", "Projects", "Experience", "Skills", "Contact"];
@@ -284,7 +284,7 @@ function IndependentList({ items }: { items: Independent[] }) {
             <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t) => <Tag key={t} t={t} />)}</div>
             <a href="#" className="mt-5 inline-flex items-center gap-1 text-sm text-wine">{p.cta}<ArrowUpRight size={15} /></a>
           </div>
-          <div className="card-visual min-w-0 overflow-hidden transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none">{p.status ? <Phone /> : <Window kind="dash" className="aspect-[4/3] xl:aspect-[16/10]" />}</div>
+          <div className="card-visual min-w-0 overflow-hidden transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none">{p.shot ? <Shot src={p.shot} alt={p.shotAlt ?? p.title} /> : <Window kind="dash" className="aspect-[4/3] xl:aspect-[16/10]" />}</div>
         </article>
       ))}
     </div>
